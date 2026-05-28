@@ -1,0 +1,22 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Local/private data and model artifacts
+data/
+models/
+outputs/*
+!outputs/.gitkeep
+*.safetensors
+*.pt
+*.pth
+*.ckpt
+*.onnx
+
+# Large derived artifacts
+*.npy
+*.npz
+*.parquet
+*.joblib

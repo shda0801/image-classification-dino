@@ -1,0 +1,13 @@
+model_dir: /secure/models/dinov3-vitb16-pretrain-lvd1689m
+image_dir: /secure/data/timeseries_images
+embeddings_output: outputs/embeddings.npz
+clusters_output: outputs/clusters.csv
+device: auto
+batch_size: 8
+num_workers: 0
+embedding_strategy: cls
+normalize: true
+cluster:
+  method: kmeans
+  n_clusters: 8
+  random_state: 42
