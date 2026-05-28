@@ -73,6 +73,28 @@ def cluster_command(args: argparse.Namespace) -> None:
     print(f"Clusters saved: {output}")
 
 
+def report_command(args: argparse.Namespace) -> None:
+    from image_classification_dino.reporting import export_cluster_contact_sheet, export_cluster_html
+
+    if args.html_output:
+        html_output = export_cluster_html(
+            args.clusters,
+            args.html_output,
+            samples_per_cluster=args.samples_per_cluster,
+        )
+        print(f"HTML report saved: {html_output}")
+
+    if args.contact_sheet_dir:
+        sheets = export_cluster_contact_sheet(
+            args.clusters,
+            args.contact_sheet_dir,
+            samples_per_cluster=args.samples_per_cluster,
+            thumb_size=args.thumb_size,
+            columns=args.columns,
+        )
+        print(f"Contact sheets saved: {len(sheets)} files in {args.contact_sheet_dir}")
+
+
 def run_command(args: argparse.Namespace) -> None:
     from image_classification_dino.clustering import cluster_embeddings
     from image_classification_dino.embedder import embed_images
@@ -125,6 +147,15 @@ def build_parser() -> argparse.ArgumentParser:
     cluster.add_argument("--n-clusters", type=int, default=8)
     cluster.add_argument("--random-state", type=int, default=42)
     cluster.set_defaults(func=cluster_command)
+
+    report = subparsers.add_parser("report", help="Create visual reports for cluster results.")
+    report.add_argument("--clusters", required=True)
+    report.add_argument("--html-output", default="outputs/cluster_report.html")
+    report.add_argument("--contact-sheet-dir", default=None)
+    report.add_argument("--samples-per-cluster", type=int, default=24)
+    report.add_argument("--thumb-size", type=int, default=160)
+    report.add_argument("--columns", type=int, default=6)
+    report.set_defaults(func=report_command)
 
     run = subparsers.add_parser("run", help="Embed images and cluster them.")
     run.add_argument("--config", default=None)

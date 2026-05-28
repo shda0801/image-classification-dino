@@ -165,6 +165,41 @@ Important cluster options:
 | `--n-clusters` | Number of clusters for methods that require it. |
 | `--random-state` | Reproducibility seed for supported methods. |
 
+## Visualize Cluster Results
+
+After clustering, create an HTML report to inspect which images landed in each cluster:
+
+```bash
+dino-images report \
+  --clusters outputs/clusters.csv \
+  --html-output outputs/cluster_report.html \
+  --samples-per-cluster 24
+```
+
+Open `outputs/cluster_report.html` in a browser. It shows sample thumbnails grouped by cluster. Each thumbnail links to the original image file.
+
+You can also export one contact sheet image per cluster:
+
+```bash
+dino-images report \
+  --clusters outputs/clusters.csv \
+  --contact-sheet-dir outputs/contact_sheets \
+  --samples-per-cluster 24 \
+  --thumb-size 160 \
+  --columns 6
+```
+
+Report options:
+
+| Option | Meaning |
+| --- | --- |
+| `--clusters` | Cluster CSV created by `dino-images cluster` or `dino-images run`. |
+| `--html-output` | Output HTML report path. |
+| `--contact-sheet-dir` | Directory for per-cluster `.jpg` contact sheets. |
+| `--samples-per-cluster` | Number of sample images to display from each cluster. |
+| `--thumb-size` | Thumbnail size for contact sheets. |
+| `--columns` | Number of columns in each contact sheet. |
+
 ## One-Shot Pipeline
 
 ```bash
