@@ -33,13 +33,14 @@ def embed_images(
     output_path: str | Path,
     *,
     device: str = "auto",
+    dtype: str = "auto",
     batch_size: int = 8,
     num_workers: int = 0,
     embedding_strategy: str = "cls",
     normalize: bool = True,
 ) -> Path:
     image_paths = discover_images(image_dir)
-    processor, model, resolved_device = load_dino_model(model_dir, device)
+    processor, model, resolved_device = load_dino_model(model_dir, device, dtype)
 
     dataset = ImagePathDataset(image_paths)
     loader = DataLoader(

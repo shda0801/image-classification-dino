@@ -6,6 +6,7 @@ from pathlib import Path
 
 def _add_common_runtime_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--device", default=None, help="auto, cpu, cuda, cuda:0, ...")
+    parser.add_argument("--dtype", choices=["auto", "float32", "float16", "bfloat16"], default=None)
     parser.add_argument("--batch-size", type=int, default=None)
     parser.add_argument("--num-workers", type=int, default=None)
     parser.add_argument(
@@ -32,6 +33,7 @@ def _config_from_args(args: argparse.Namespace):
         "embeddings_output": Path(args.embeddings_output) if getattr(args, "embeddings_output", None) else None,
         "clusters_output": Path(args.clusters_output) if getattr(args, "clusters_output", None) else None,
         "device": args.device,
+        "dtype": args.dtype,
         "batch_size": args.batch_size,
         "num_workers": args.num_workers,
         "embedding_strategy": args.embedding_strategy,
@@ -52,6 +54,7 @@ def embed_command(args: argparse.Namespace) -> None:
         config.image_dir,
         config.embeddings_output,
         device=config.device,
+        dtype=config.dtype,
         batch_size=config.batch_size,
         num_workers=config.num_workers,
         embedding_strategy=config.embedding_strategy,
@@ -105,6 +108,7 @@ def run_command(args: argparse.Namespace) -> None:
         config.image_dir,
         config.embeddings_output,
         device=config.device,
+        dtype=config.dtype,
         batch_size=config.batch_size,
         num_workers=config.num_workers,
         embedding_strategy=config.embedding_strategy,

@@ -126,6 +126,7 @@ dino-images embed \
   --image-dir IMAGE_DIR \
   --embeddings-output outputs/embeddings.npz \
   --device auto \
+  --dtype auto \
   --batch-size 8 \
   --num-workers 0 \
   --embedding-strategy cls
@@ -139,6 +140,7 @@ Important embed options:
 | `--image-dir` | Directory containing unlabeled images. Searched recursively. |
 | `--embeddings-output` / `--output` | Output `.npz` embedding file. A sidecar `.csv` is also written. |
 | `--device` | `auto`, `cpu`, `cuda`, `cuda:0`, etc. |
+| `--dtype` | `auto`, `bfloat16`, `float16`, or `float32`. Use `bfloat16` on H100. |
 | `--batch-size` | Increase on stronger GPUs; lower it on weak CPU/GPU machines. |
 | `--num-workers` | DataLoader workers. Start with `0`; increase on HPC if image loading is slow. |
 | `--embedding-strategy` | `cls`, `patch_mean`, or `cls_patch_mean`. Start with `cls`. |
@@ -216,3 +218,23 @@ dino-images run \
 - Low-end CPU/GPU: start with `--batch-size 1` or `--batch-size 4`.
 - NVIDIA GPU: use `--device cuda` or `--device auto`.
 - Supercomputer/HPC GPU: keep the same commands and adjust `--batch-size`, `--num-workers`, and scheduler paths.
+
+### H100 7B Starting Settings
+
+For one H100 GPU with a 7B DINO model, start with:
+
+```bash
+dino-images run \
+  --model-dir /home/yudo/secure/models/dinov3-7b \
+  --image-dir /home/yudo/secure/data/timeseries_images \
+  --embeddings-output outputs/embeddings_7b.npz \
+  --clusters-output outputs/clusters_7b.csv \
+  --device cuda \
+  --dtype bfloat16 \
+  --batch-size 16 \
+  --num-workers 4 \
+  --embedding-strategy cls \
+  --n-clusters 8
+```
+
+If GPU memory is stable, try `--batch-size 32`, then `64`. If you see out-of-memory errors, drop to `8` or `4`. H100 supports bfloat16 well, so prefer `--dtype bfloat16` over `float32` for the 7B model.

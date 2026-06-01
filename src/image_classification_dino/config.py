@@ -21,6 +21,7 @@ class PipelineConfig:
     embeddings_output: Path = Path("outputs/embeddings.npz")
     clusters_output: Path = Path("outputs/clusters.csv")
     device: str = "auto"
+    dtype: str = "auto"
     batch_size: int = 8
     num_workers: int = 0
     embedding_strategy: str = "cls"
